@@ -31,14 +31,16 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             const data = await apiLogin(email, password);
-            const authToken = data.access_token || data.token;
+            // Backend returns: { success: true, data: { token: "...", user: {...} } }
+            const authToken = data.data.token;
             setToken(authToken);
-            const userData = data.user || { email };
+            localStorage.setItem('token', authToken);
+            const userData = data.data.user || { email };
             setUser(userData);
             localStorage.setItem('currentUser', JSON.stringify(userData));
             return data;
         } catch (err) {
-            const message = err?.detail || err?.message || 'Login failed';
+            const message = err?.detail?.message || err?.detail || err?.message || 'Login failed';
             setError(message);
             throw err;
         } finally {
@@ -51,9 +53,18 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             const data = await apiSignup(name, email, password);
+            // Backend returns: { success: true, data: { token: "...", user: {...} } }
+            const authToken = data.data?.token;
+            if (authToken) {
+                setToken(authToken);
+                localStorage.setItem('token', authToken);
+                const userData = data.data?.user || { email };
+                setUser(userData);
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+            }
             return data;
         } catch (err) {
-            const message = err?.detail || err?.message || 'Signup failed';
+            const message = err?.detail?.message || err?.detail || err?.message || 'Signup failed';
             setError(message);
             throw err;
         } finally {
@@ -66,14 +77,16 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         try {
             const data = await apiGoogleAuth(id_token);
-            const authToken = data.access_token || data.token;
+            // Backend returns: { success: true, data: { token: "...", user: {...} } }
+            const authToken = data.data.token;
             setToken(authToken);
-            const userData = data.user || {};
+            localStorage.setItem('token', authToken);
+            const userData = data.data.user || {};
             setUser(userData);
             localStorage.setItem('currentUser', JSON.stringify(userData));
             return data;
         } catch (err) {
-            const message = err?.detail || err?.message || 'Google auth failed';
+            const message = err?.detail?.message || err?.detail || err?.message || 'Google auth failed';
             setError(message);
             throw err;
         } finally {

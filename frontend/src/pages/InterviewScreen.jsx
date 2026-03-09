@@ -17,6 +17,7 @@ const InterviewScreen = () => {
         isComplete,
         questionNumber,
         fetchNextQuestion,
+        answer,
         reset,
     } = useInterview();
 
@@ -56,6 +57,14 @@ const InterviewScreen = () => {
         return () => clearInterval(timer);
     }, [isComplete, timeLeft]);
 
+    // When interview is complete, exit properly via useEffect (not in render body)
+    useEffect(() => {
+        if (isComplete) {
+            reset();
+            navigate('/config');
+        }
+    }, [isComplete, reset, navigate]);
+
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
@@ -75,9 +84,8 @@ const InterviewScreen = () => {
         ? Math.min((questionNumber / totalQuestions) * 100, 100)
         : 0;
 
-    // When interview is complete, go back to config
+    // Don't render interview UI when complete (useEffect above handles navigation)
     if (isComplete) {
-        handleExit();
         return null;
     }
 
@@ -180,6 +188,7 @@ const InterviewScreen = () => {
                         <QuestionCard
                             question={currentQuestion}
                             onNext={handleNextQuestion}
+                            onSubmitAnswer={answer}
                             loading={loading}
                         />
                     </div>

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://127.0.0.1:8000/api/v1';
 
-
+// Create a central axios instance
 const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
@@ -85,12 +85,13 @@ export const getNextQuestion = async (session_id) => {
 };
 
 // 6. submitAnswer
-export const submitAnswer = async (session_id, interview_question_id, user_answer, student_id) => {
+// Backend SubmitAnswerRequest expects only: { interview_question_id, user_answer }
+// student_id is derived server-side from the JWT token
+export const submitAnswer = async (session_id, interview_question_id, user_answer) => {
     return handleRequest(
         api.post(`/interview/${session_id}/answer`, {
             interview_question_id,
             user_answer,
-            student_id,
         })
     );
 };

@@ -28,7 +28,6 @@ const InterviewConfig = () => {
         setConfigError(null);
         try {
             const payload = {
-                student_id: user?.id || user?.email || 'anonymous',
                 subject: subject,
                 mode: bloomMode === 'single' ? 'single_bloom' : 'mixed_bloom',
                 bloom_level: bloomLevelMap[bloomLevel] || 'L1',
@@ -96,10 +95,11 @@ const InterviewConfig = () => {
                                 <option value="" disabled>Choose your subject</option>
                                 <option value="React">⚛️ React</option>
                                 <option value="JavaScript">🟨 JavaScript</option>
-                                <option value="CSS">🎨 CSS</option>
+                                <option value="Full-Frontend">🎨 Full Frontend</option>
                                 <option value="Python">🐍 Python</option>
                                 <option value="Java">☕ Java</option>
                                 <option value="Node.js">💚 Node.js</option>
+                                <option value="Full-Backend"> Backend</option>
                             </select>
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
