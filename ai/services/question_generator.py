@@ -4,7 +4,6 @@ from groq import Groq
 from app.services.pinecone import query_embeddings,upsert_embeddings
 from app.core.config import GROQ_API_KEY
 client = Groq(
-    model="llama-3.3-70b-versatile",
     api_key=GROQ_API_KEY,
 )
 def build_prompt(data, context=""):
